@@ -1,0 +1,59 @@
+{
+  "name": "ai-rate-queue",
+  "version": "0.1.0",
+  "description": "Redis-backed requests-per-minute limiter for AI/LLM API calls.",
+  "license": "MIT",
+  "author": "Julian M. Kleber",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cap-jmk-real/ai-rate-queue.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cap-jmk-real/ai-rate-queue/issues"
+  },
+  "homepage": "https://github.com/cap-jmk-real/ai-rate-queue#readme",
+  "keywords": [
+    "rate-limit",
+    "queue",
+    "redis",
+    "openai",
+    "anthropic",
+    "llm"
+  ],
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node --test dist/**/*.test.js",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "ioredis": "^5.10.0"
+  },
+  "peerDependenciesMeta": {
+    "ioredis": {
+      "optional": false
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.0",
+    "ioredis": "^5.10.0",
+    "typescript": "^5.9.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
+
