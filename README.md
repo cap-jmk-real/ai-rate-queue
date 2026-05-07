@@ -1,6 +1,8 @@
 # ai-rate-queue
 
 [![CI](https://shieldcn.dev/github/ci/cap-jmk-real/ai-rate-queue.svg?variant=secondary&style=flat-square&labelColor=171717&color=2ea44f)](https://github.com/cap-jmk-real/ai-rate-queue/actions/workflows/ci.yml)
+[![npm](https://shieldcn.dev/npm/v/ai-rate-queue.svg?variant=secondary&style=flat-square&labelColor=171717)](https://www.npmjs.com/package/ai-rate-queue)
+[![downloads](https://shieldcn.dev/npm/dm/ai-rate-queue.svg?variant=secondary&style=flat-square&labelColor=171717)](https://www.npmjs.com/package/ai-rate-queue)
 [![License](https://shieldcn.dev/github/license/cap-jmk-real/ai-rate-queue.svg?variant=secondary&style=flat-square&labelColor=171717&color=22c55e)](LICENSE)
 [![Node](https://shieldcn.dev/badge/node-%3E%3D18-339933.svg?logo=node.js&variant=branded&style=flat-square&labelColor=171717)](https://nodejs.org/)
 [![TypeScript](https://shieldcn.dev/badge/TypeScript-5.9-3178C6.svg?logo=typescript&variant=branded&style=flat-square&labelColor=171717)](https://www.typescriptlang.org/)

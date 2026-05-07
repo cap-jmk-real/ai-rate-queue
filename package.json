@@ -1,6 +1,6 @@
 {
   "name": "ai-rate-queue",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Redis-backed requests-per-minute limiter for AI/LLM API calls.",
   "license": "MIT",
   "author": "Julian M. Kleber",
