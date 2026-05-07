@@ -5,6 +5,11 @@ on:
     tags:
       - "v*.*.*"
   workflow_dispatch:
+    inputs:
+      confirm_tag:
+        description: "Type the git tag (e.g. v0.1.0) to confirm publishing"
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -12,22 +17,39 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node: [24]
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node }}
+          node-version: 24.x
           cache: npm
           registry-url: https://registry.npmjs.org
 
       - run: npm ci
       - run: npm test
 
+      - name: Validate manual publish confirmation
+        if: github.event_name == 'workflow_dispatch'
+        shell: bash
+        run: |
+          set -euo pipefail
+          TAG="${{ inputs.confirm_tag }}"
+          if [[ ! "$TAG" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Invalid confirm_tag: '$TAG' (expected vX.Y.Z or X.Y.Z)"
+            exit 1
+          fi
+          if [[ "${GITHUB_REF}" != refs/tags/* ]]; then
+            echo "Ref is not a tag (${GITHUB_REF}). Re-run workflow on a tag."
+            exit 1
+          fi
+          if [[ "${GITHUB_REF_NAME}" != "$TAG" ]]; then
+            echo "confirm_tag '$TAG' does not match current tag '${GITHUB_REF_NAME}'"
+            exit 1
+          fi
+
       - name: Publish
+        if: startsWith(github.ref, 'refs/tags/')
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
