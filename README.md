@@ -11,6 +11,8 @@ Redis-backed requests-per-minute (RPM) limiter for AI/LLM API calls. Works acros
 
 ## Install
 
+Requires **Node.js >=22**.
+
 ```bash
 npm install ai-rate-queue
 ```

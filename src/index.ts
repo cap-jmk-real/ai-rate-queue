@@ -22,13 +22,24 @@ export interface RateLimitQueueConfig {
 export interface RedisLike {
   incr(key: string): Promise<number>;
   decr(key: string): Promise<number>;
-  pexpire(key: string, milliseconds: number): Promise<number>;
+  pexpire?(key: string, milliseconds: number): Promise<number>;
+  pExpire?(key: string, milliseconds: number): Promise<number>;
 }
 
 const DEFAULT_PREFIX = "ai-rate-queue";
 const WINDOW_MS = 60_000;
 const DEFAULT_JITTER_MS = 200;
 const EXPIRY_BUFFER_MS = 5_000;
+
+async function callRedisPexpire(
+  redis: RedisLike,
+  key: string,
+  milliseconds: number
+): Promise<number> {
+  if (redis.pExpire) return redis.pExpire(key, milliseconds);
+  if (redis.pexpire) return redis.pexpire(key, milliseconds);
+  throw new Error("redis client must implement pExpire or pexpire");
+}
 
 function sleep(ms: number): Promise<void> {
   return new Promise((r) => setTimeout(r, ms));
@@ -60,7 +71,7 @@ export function createRateLimitQueue(config: RateLimitQueueConfig) {
     const count = await redis.incr(key);
 
     if (count === 1) {
-      await redis.pexpire(key, WINDOW_MS + EXPIRY_BUFFER_MS);
+      await callRedisPexpire(redis, key, WINDOW_MS + EXPIRY_BUFFER_MS);
     }
 
     if (count > requestsPerMinute) {

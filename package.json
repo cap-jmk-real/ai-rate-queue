@@ -38,15 +38,16 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "node ./node_modules/typescript/lib/tsc.js -p tsconfig.json",
     "docs:dev": "npm run dev --prefix docs",
     "docs:build": "npm run build --prefix docs",
     "docs:preview": "npm run preview --prefix docs",
-    "test": "vitest run",
-    "test:coverage": "vitest run --coverage --coverage.provider=v8 --coverage.include=src/** --coverage.thresholds.branches=100 --coverage.thresholds.functions=100 --coverage.thresholds.lines=100 --coverage.thresholds.statements=100",
+    "test": "node ./node_modules/vitest/vitest.mjs run",
+    "test:coverage": "node ./node_modules/vitest/vitest.mjs run --coverage --coverage.provider=v8 --coverage.include=src/** --coverage.thresholds.branches=100 --coverage.thresholds.functions=100 --coverage.thresholds.lines=100 --coverage.thresholds.statements=100",
+    "lock:check": "node scripts/assert-emnapi-lock.mjs",
     "audit": "npm audit --audit-level=high",
     "audit:prod": "npm audit --omit=dev --audit-level=high",
-    "ci": "npm run test:coverage",
+    "ci": "npm run lock:check && npm run test:coverage",
     "ci:local": "npm ci && npm run ci && npm run build",
     "version:check": "node scripts/check-version-not-released.mjs",
     "version:patch": "npm version patch -m \"chore: release %s\"",
@@ -55,6 +56,8 @@
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
+    "@emnapi/core": "1.10.0",
+    "@emnapi/runtime": "1.10.0",
     "@types/node": "^22.19.0",
     "@vitest/coverage-v8": "^4.1.5",
     "typescript": "^5.9.0",
