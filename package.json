@@ -43,7 +43,14 @@
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
     "test": "vitest run",
-    "test:coverage": "vitest run --coverage --coverage.provider=v8 --coverage.thresholds.branches=100 --coverage.thresholds.functions=100 --coverage.thresholds.lines=100 --coverage.thresholds.statements=100",
+    "test:coverage": "vitest run --coverage --coverage.provider=v8 --coverage.include=src/** --coverage.thresholds.branches=100 --coverage.thresholds.functions=100 --coverage.thresholds.lines=100 --coverage.thresholds.statements=100",
+    "audit": "npm audit --audit-level=high",
+    "audit:prod": "npm audit --omit=dev --audit-level=high",
+    "ci": "npm run test:coverage",
+    "version:check": "node scripts/check-version-not-released.mjs",
+    "version:patch": "npm version patch -m \"chore: release %s\"",
+    "version:minor": "npm version minor -m \"chore: release %s\"",
+    "version:major": "npm version major -m \"chore: release %s\"",
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
@@ -63,7 +70,7 @@
     "typescript": "^5.9.0"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   }
 }
 
