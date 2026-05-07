@@ -47,6 +47,7 @@
     "audit": "npm audit --audit-level=high",
     "audit:prod": "npm audit --omit=dev --audit-level=high",
     "ci": "npm run test:coverage",
+    "ci:local": "npm ci && npm run ci && npm run build",
     "version:check": "node scripts/check-version-not-released.mjs",
     "version:patch": "npm version patch -m \"chore: release %s\"",
     "version:minor": "npm version minor -m \"chore: release %s\"",
