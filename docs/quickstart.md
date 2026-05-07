@@ -3,7 +3,13 @@
 ## Install
 
 ```bash
-npm install ai-rate-queue ioredis
+npm install ai-rate-queue
+```
+
+Install a Redis client (example: `ioredis`):
+
+```bash
+npm install ioredis
 ```
 
 ## Minimal example

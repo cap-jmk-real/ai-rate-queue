@@ -6,7 +6,7 @@ describe("createRateLimitQueue", () => {
   it("throws on invalid RPM", () => {
     expect(() =>
       createRateLimitQueue({
-        redis: {} as unknown as import("ioredis").Redis,
+        redis: {} as unknown as import("./index.js").RedisLike,
         requestsPerMinute: 0,
       })
     ).toThrow(/requestsPerMinute must be a positive number/);
@@ -27,7 +27,7 @@ describe("enqueue", () => {
         calls.push("pexpire");
         return 1;
       },
-    } as unknown as import("ioredis").Redis;
+    } as unknown as import("./index.js").RedisLike;
 
     const queue = createRateLimitQueue({
       redis,
@@ -51,11 +51,11 @@ describe("enqueue", () => {
         calls.push("decr");
         return 1;
       },
-      pexpire: async (_key: string, _ms: number) => {
-        calls.push("pexpire");
+      pExpire: async (_key: string, _ms: number) => {
+        calls.push("pExpire");
         return 1;
       },
-    } as unknown as import("ioredis").Redis;
+    } as unknown as import("./index.js").RedisLike;
 
     vi.useFakeTimers();
     vi.setSystemTime(new Date(60_000));
@@ -74,7 +74,7 @@ describe("enqueue", () => {
 
     const result = await p;
     expect(result).toBe("ok");
-    expect(calls).toEqual(["decr", "pexpire"]);
+    expect(calls).toEqual(["decr", "pExpire"]);
 
     vi.useRealTimers();
   });
@@ -85,8 +85,8 @@ describe("enqueue", () => {
     const redis = {
       incr: async (_key: string) => incrResults.shift() ?? 1,
       decr: async (_key: string) => 1,
-      pexpire: async (_key: string, _ms: number) => 1,
-    } as unknown as import("ioredis").Redis;
+      pExpire: async (_key: string, _ms: number) => 1,
+    } as unknown as import("./index.js").RedisLike;
 
     vi.useFakeTimers();
     vi.setSystemTime(new Date(60_000));
@@ -106,6 +106,24 @@ describe("enqueue", () => {
 
     vi.restoreAllMocks();
     vi.useRealTimers();
+  });
+
+  it("throws if redis client does not support pExpire/pexpire", async () => {
+    const redis = {
+      incr: async (_key: string) => 1,
+      decr: async (_key: string) => 0,
+    } as unknown as import("./index.js").RedisLike;
+
+    const queue = createRateLimitQueue({
+      redis,
+      requestsPerMinute: 1,
+      jitterMs: 0,
+      keyPrefix: "t",
+    });
+
+    await expect(queue.enqueue(async () => "ok")).rejects.toThrow(
+      /pExpire or pexpire/
+    );
   });
 });
 
