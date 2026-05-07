@@ -8,8 +8,8 @@
 export interface RateLimitQueueConfig {
   /** Requests per minute (shared across workers). */
   requestsPerMinute: number;
-  /** Redis client for distributed rate limiting. */
-  redis: import("ioredis").Redis;
+  /** Redis-like client for distributed rate limiting. */
+  redis: RedisLike;
   /** Redis key prefix for rate-limit counters. Default "ai-rate-queue". */
   keyPrefix?: string;
   /**
@@ -17,6 +17,12 @@ export interface RateLimitQueueConfig {
    * Default 200ms.
    */
   jitterMs?: number;
+}
+
+export interface RedisLike {
+  incr(key: string): Promise<number>;
+  decr(key: string): Promise<number>;
+  pexpire(key: string, milliseconds: number): Promise<number>;
 }
 
 const DEFAULT_PREFIX = "ai-rate-queue";

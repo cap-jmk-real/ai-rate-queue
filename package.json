@@ -39,9 +39,9 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs",
+    "docs:dev": "npm run dev --prefix docs",
+    "docs:build": "npm run build --prefix docs",
+    "docs:preview": "npm run preview --prefix docs",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage --coverage.provider=v8 --coverage.include=src/** --coverage.thresholds.branches=100 --coverage.thresholds.functions=100 --coverage.thresholds.lines=100 --coverage.thresholds.statements=100",
     "audit": "npm audit --audit-level=high",
@@ -53,24 +53,13 @@
     "version:major": "npm version major -m \"chore: release %s\"",
     "prepublishOnly": "npm run build"
   },
-  "peerDependencies": {
-    "ioredis": "^5.10.0"
-  },
-  "peerDependenciesMeta": {
-    "ioredis": {
-      "optional": false
-    }
-  },
   "devDependencies": {
     "@types/node": "^22.19.0",
-    "@vitest/coverage-v8": "^3.2.4",
-    "ioredis": "^5.10.0",
-    "vitest": "^3.2.4",
-    "vitepress": "^1.6.4",
-    "typescript": "^5.9.0"
+    "@vitest/coverage-v8": "^4.1.5",
+    "typescript": "^5.9.0",
+    "vitest": "^4.1.5"
   },
   "engines": {
     "node": ">=22"
   }
 }
-

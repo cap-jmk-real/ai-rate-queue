@@ -10,7 +10,13 @@ Redis-backed requests-per-minute (RPM) limiter for AI/LLM API calls. Works acros
 ## Install
 
 ```bash
-npm install ai-rate-queue ioredis
+npm install ai-rate-queue
+```
+
+Bring your own Redis client (example with `ioredis`):
+
+```bash
+npm install ioredis
 ```
 
 ## Usage

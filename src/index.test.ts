@@ -6,7 +6,7 @@ describe("createRateLimitQueue", () => {
   it("throws on invalid RPM", () => {
     expect(() =>
       createRateLimitQueue({
-        redis: {} as unknown as import("ioredis").Redis,
+        redis: {} as unknown as import("./index.js").RedisLike,
         requestsPerMinute: 0,
       })
     ).toThrow(/requestsPerMinute must be a positive number/);
@@ -27,7 +27,7 @@ describe("enqueue", () => {
         calls.push("pexpire");
         return 1;
       },
-    } as unknown as import("ioredis").Redis;
+    } as unknown as import("./index.js").RedisLike;
 
     const queue = createRateLimitQueue({
       redis,
@@ -55,7 +55,7 @@ describe("enqueue", () => {
         calls.push("pexpire");
         return 1;
       },
-    } as unknown as import("ioredis").Redis;
+    } as unknown as import("./index.js").RedisLike;
 
     vi.useFakeTimers();
     vi.setSystemTime(new Date(60_000));
@@ -86,7 +86,7 @@ describe("enqueue", () => {
       incr: async (_key: string) => incrResults.shift() ?? 1,
       decr: async (_key: string) => 1,
       pexpire: async (_key: string, _ms: number) => 1,
-    } as unknown as import("ioredis").Redis;
+    } as unknown as import("./index.js").RedisLike;
 
     vi.useFakeTimers();
     vi.setSystemTime(new Date(60_000));
